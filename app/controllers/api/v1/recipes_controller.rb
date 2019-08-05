@@ -44,7 +44,11 @@ module Api
                 begin
                     @recipe = Recipe.find_by(name: params[:name])
 
-                    render json: { status: 'SUCCESS', message: 'Loaded recipe!', data: @recipe }, status: :ok
+                    if @recipe.present?
+                        render json: { status: 'SUCCESS', message: 'Loaded recipe!', data: @recipe }, status: :ok
+                    else
+                        render json: { status: 'SUCCESS', message: 'No recipe found', data: {} }, status: :not_found
+                    end
                 rescue
                     render json: { status: 'ERROR', message: 'Error loading recipe', data: {} }, status: :not_found
                 end
